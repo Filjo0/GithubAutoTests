@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GithubAutomation", "GithubAutomation\GithubAutomation.csproj", "{6D317FD7-2952-4A45-8741-621FBB4F4A8E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GithubTests", "GithubTests\GithubTests.csproj", "{7B48FBA7-F9A0-458E-AB86-77589FAA238C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6D317FD7-2952-4A45-8741-621FBB4F4A8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D317FD7-2952-4A45-8741-621FBB4F4A8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D317FD7-2952-4A45-8741-621FBB4F4A8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D317FD7-2952-4A45-8741-621FBB4F4A8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B48FBA7-F9A0-458E-AB86-77589FAA238C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B48FBA7-F9A0-458E-AB86-77589FAA238C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B48FBA7-F9A0-458E-AB86-77589FAA238C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B48FBA7-F9A0-458E-AB86-77589FAA238C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
