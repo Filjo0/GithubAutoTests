@@ -1,7 +1,10 @@
-﻿using GithubAutomation;
+﻿using System;
+using GithubAutomation;
 using GithubAutomation.Pages;
+using GithubAutomation.Selenium;
 using GithubTests.Utilities;
 using NUnit.Framework;
+using OpenQA.Selenium;
 
 namespace GithubTests.Smoke_Tests
 {
@@ -25,14 +28,45 @@ namespace GithubTests.Smoke_Tests
         public void Can_Go_To_Repos_Page()
         {
             RepoPage.GoToListOfRepos();
-            Assert.IsTrue(RepoPage.IsAt, "Failed to open Repos page");
+            Assert.IsTrue(RepoPage.IsAtListOfReposPage, "Failed to open Repos page");
+        }
+
+        [Test]
+        public void User_Have_Repos()
+        {
+            RepoPage.GoToListOfRepos();
+            Assert.That(RepoPage.HaveRepos, "No repos found!");
+        }
+
+        [Test]
+        public void Can_Open_First_Repo_Page()
+        {
+            RepoPage.GoToListOfRepos();
+            if (RepoPage.HaveRepos())
+            {
+                RepoPage.GoToFirstRepoPage();
+            }
+
+            Assert.That(RepoPage.IsAtFirstRepoPage, "Cannot open this page!");
+        }
+
+        [Test]
+        public void Can_Open_Certain_Repo_Page()
+        {
+            RepoPage.GoToListOfRepos();
+            if (RepoPage.HaveRepos())
+            {
+                RepoPage.GoToRepoPage("TestRepo");
+            }
+
+            Assert.That(RepoPage.Title.Equals("TestRepo"), "Cannot open this page!");
         }
 
         [Test]
         public void Can_Delete_Repo_Page()
         {
             RepoPage.GoToListOfRepos();
-            RepoPage.OpenRepoPage("TestRepo");
+            RepoPage.GoToRepoPage("TestRepo");
             RepoPage.DeleteRepo();
 
             Assert.That(RepoPage.DeletedMessage.Contains("was successfully deleted."),

@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using GithubAutomation.Navigation;
 using GithubAutomation.Selenium;
 using OpenQA.Selenium;
@@ -34,22 +36,39 @@ namespace GithubAutomation.Pages
 
         public static void GoToListOfRepos()
         {
-            NavigationPanel.UserImage.Select();
+            NavigationPanel.UserImage.OpenDropMenu();
 
-            var goToReposPage = Driver.Instance.FindElement(By.LinkText("Your repositories"));
-            goToReposPage.Click();
+            NavigationPanel.UserImage.YourRepositories.Select();
         }
 
-        public static bool IsAt
+        public static bool IsAtListOfReposPage
         {
             get
             {
-                var isRepoPage = Driver.Instance.FindElement(By.CssSelector("a.UnderlineNav-item.selected"));
-                return Regex.Replace(isRepoPage.Text, @"\d+", "").Contains("Repositories");
+                var isListOfReposPage = Driver.Instance.FindElement(By.CssSelector("a.UnderlineNav-item.selected"));
+                return Regex.Replace(isListOfReposPage.Text, @"\d+", "").Contains("Repositories");
             }
         }
 
-        public static void OpenRepoPage(string title)
+        public static bool HaveRepos()
+        {
+            var reposList = Driver.Instance.FindElements(By.CssSelector("h3.wb-break-all a"));
+            return reposList.Count > 0;
+        }
+
+        public static void GoToFirstRepoPage()
+        {
+            var reposList = Driver.Instance.FindElements(By.CssSelector("h3.wb-break-all a"));
+            reposList[0].Click();
+        }
+
+        public static bool IsAtFirstRepoPage()
+        {
+            var title = Driver.Instance.FindElement(By.CssSelector("a[data-pjax='#js-repo-pjax-container']"));
+            return title != null;
+        }
+
+        public static void GoToRepoPage(string title)
         {
             var repoPage = Driver.Instance.FindElement(By.LinkText(title));
             repoPage.Click();

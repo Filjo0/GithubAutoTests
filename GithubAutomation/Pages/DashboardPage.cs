@@ -8,7 +8,7 @@ namespace GithubAutomation.Pages
         {
             get
             {
-                NavigationPanel.UserImage.Select();
+                NavigationPanel.UserImage.OpenDropMenu();
                 var signedInAs = NavigationPanel.UserImage.FindElements();
                 return signedInAs.Count > 0 && signedInAs[0].Text.Contains("Signed in as ");
             }

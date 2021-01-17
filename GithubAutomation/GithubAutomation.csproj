@@ -43,6 +43,7 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Navigation\IssuePanel.cs" />
         <Compile Include="Navigation\NavigationPanel.cs" />
         <Compile Include="Navigation\RepoPanel.cs" />
         <Compile Include="Pages\DashboardPage.cs" />

@@ -18,7 +18,7 @@ namespace GithubAutomation.Navigation
         {
             public static void Select()
             {
-                var issues = Driver.Instance.FindElement(By.LinkText("Issues"));
+                var issues = Driver.Instance.FindElement(By.CssSelector("[data-content='Issues']"));
                 issues.Click();
             }
         }

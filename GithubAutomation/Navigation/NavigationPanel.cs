@@ -26,10 +26,19 @@ namespace GithubAutomation.Navigation
 
         public class UserImage
         {
-            public static void Select()
+            public static void OpenDropMenu()
             {
                 var avatar = Driver.Instance.FindElement(By.CssSelector("summary > img.avatar"));
                 avatar.Click();
+            }
+
+            public class YourRepositories
+            {
+                public static void Select()
+                {
+                    var goToReposPage = Driver.Instance.FindElement(By.LinkText("Your repositories"));
+                    goToReposPage.Click();
+                }
             }
 
             public static ReadOnlyCollection<IWebElement> FindElements()
