@@ -5,3 +5,4 @@ Autotests:
 - Login
 - Create Repositories
 - Delete Repositories
+- Create Issue
