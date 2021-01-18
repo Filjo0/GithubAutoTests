@@ -1,5 +1,5 @@
 ﻿using System;
-using System.IO;
+using System.Linq;
 using GithubAutomation.Navigation;
 using GithubAutomation.Selenium;
 using OpenQA.Selenium;
@@ -8,6 +8,8 @@ namespace GithubAutomation.Pages
 {
     public static class IssuePage
     {
+        private static int _lastCount;
+
         public static string Title
         {
             get
@@ -16,6 +18,10 @@ namespace GithubAutomation.Pages
                 return title != null ? title.Text : string.Empty;
             }
         }
+
+        public static int PreviousIssueCount => _lastCount;
+
+        public static int CurrentIssueCount => GetIssueCount();
 
         public static void GoToListOfIssues()
         {
@@ -35,6 +41,55 @@ namespace GithubAutomation.Pages
         public static CreatIssueCommand CreateIssue(string title)
         {
             return new CreatIssueCommand(title);
+        }
+
+        public static void CountIssues()
+        {
+            _lastCount = GetIssueCount();
+        }
+
+        private static int GetIssueCount()
+        {
+            var number = 0;
+            var countIssues =
+                Driver.Instance.FindElement(By.CssSelector("[data-tab-item='i1issues-tab'] span.Counter"));
+            if (countIssues.Displayed)
+            {
+                number = Convert.ToInt32(countIssues.Text);
+            }
+
+            Console.WriteLine(number);
+            return number;
+        }
+
+        public static bool? DoesIssueExistWithTitle(string title)
+        {
+            return Driver.Instance.FindElements(By.LinkText(title)).Any();
+        }
+
+        public static void DeleteIssue(string title)
+        {
+            var issuesWithTitle = Driver.Instance.FindElements(By.LinkText(title));
+            if (issuesWithTitle.Count > 0)
+            {
+                issuesWithTitle[0].Click();
+            }
+
+            var buttons = Driver.Instance.FindElements(By.CssSelector("summary span strong"));
+            foreach (var button in buttons)
+            {
+                if (button.Text.Contains("Delete"))
+                {
+                    button.Click();
+                }
+            }
+
+            var submitDeleteButton =
+                Driver.Instance.FindElement(By.CssSelector("button[name='verify_delete']"));
+            if (submitDeleteButton.Displayed)
+            {
+                submitDeleteButton.Click();
+            }
         }
     }
 
