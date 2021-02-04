@@ -3,7 +3,9 @@ Automated testing of github using C# + nUnit
 
 Autotests:
 - Login
-- Create Repositories
-- Delete Repositories
+- Create Repository
+- Delete Repository
+- Search Repository
 - Create Issue
 - Check if Issue has been added and then delete issue
+- Search Issue
