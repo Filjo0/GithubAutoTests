@@ -1,25 +1,17 @@
-﻿using System;
-using GithubAutomation;
-using GithubAutomation.Pages;
-using GithubAutomation.Selenium;
+﻿using GithubAutomation.Pages;
+using GithubAutomation.Workflows;
 using GithubTests.Utilities;
 using NUnit.Framework;
-using OpenQA.Selenium;
 
 namespace GithubTests.Smoke_Tests
 {
     [TestFixture]
-    public class NewRepoTests : GithubTest
+    public class NewRepoTests : BaseSetup
     {
         [Test]
         public void Can_Create_A_Repo()
         {
-            NewRepoPage.GoTo();
-            NewRepoPage
-                .CreateRepo("TestRepo")
-                .WithDescription("Hi, this is the description.")
-                .IsPrivate(true)
-                .Publish();
+            RepoCreator.CreateRepo();
 
             Assert.AreEqual(RepoPage.Title, "TestRepo", "Title did not match new repo");
         }
@@ -41,7 +33,6 @@ namespace GithubTests.Smoke_Tests
         [Test]
         public void Can_Open_First_Repo_Page()
         {
-            RepoPage.GoToListOfRepos();
             if (RepoPage.HaveRepos())
             {
                 RepoPage.GoToFirstRepoPage();
@@ -53,24 +44,38 @@ namespace GithubTests.Smoke_Tests
         [Test]
         public void Can_Open_Certain_Repo_Page()
         {
-            RepoPage.GoToListOfRepos();
-            if (RepoPage.HaveRepos())
+            if (RepoPage.DoesRepoExistWithTitle("TestRepo"))
             {
                 RepoPage.GoToRepoPage("TestRepo");
             }
 
-            Assert.That(RepoPage.Title.Equals("TestRepo"), "Cannot open this page!");
+            Assert.That(RepoPage.Title.Equals("TestRepo"), "Repositories not found!");
         }
 
         [Test]
         public void Can_Delete_Repo_Page()
         {
-            RepoPage.GoToListOfRepos();
             RepoPage.GoToRepoPage("TestRepo");
-            RepoPage.DeleteRepo();
+            RepoPage.DeleteRepo("TestRepo");
 
             Assert.That(RepoPage.DeletedMessage.Contains("was successfully deleted."),
                 "Your repository was not deleted");
+        }
+
+        [Test]
+        public void Can_Search_Repos()
+        {
+            // Check if Repo already exists
+            if (!RepoPage.DoesRepoExistWithTitle("TestRepo"))
+            {
+                //create a new repo if does not exist
+                RepoCreator.CreateRepo();
+            }
+
+            //Search for Repo
+            RepoPage.SearchForRepo("TestRepo");
+            //Check that repo shows up in results
+            Assert.IsTrue(RepoPage.DoesRepoExistWithTitle("TestRepo"), "Repository does not exist!");
         }
     }
 }

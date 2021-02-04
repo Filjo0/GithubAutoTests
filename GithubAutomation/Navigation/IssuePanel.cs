@@ -7,16 +7,16 @@ namespace GithubAutomation.Navigation
     {
         public class AddIssue
         {
-            static IWebElement newIssueButton = Driver.Instance.FindElement(By.CssSelector("a.btn-primary.btn"));
+            private static readonly IWebElement NewIssueButton = Driver.Instance.FindElement(By.CssSelector("a.btn-primary.btn"));
 
             public static string GetText()
             {
-                return newIssueButton.Text;
+                return NewIssueButton.Text;
             }
 
             public static void Select()
             {
-                newIssueButton.Click();
+                NewIssueButton.Click();
             }
         }
     }

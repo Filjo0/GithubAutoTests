@@ -10,8 +10,9 @@
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <RootNamespace>GithubTests</RootNamespace>
         <AssemblyName>GithubTests</AssemblyName>
-        <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -49,9 +50,9 @@
     <ItemGroup>
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Smoke Tests\LoginTest.cs" />
-        <Compile Include="Smoke Tests\NewIssueTest.cs" />
+        <Compile Include="Smoke Tests\NewIssuesTest.cs" />
         <Compile Include="Smoke Tests\NewRepoTests.cs" />
-        <Compile Include="Utilities\GithubTest.cs" />
+        <Compile Include="Utilities\BaseSetup.cs" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\GithubAutomation\GithubAutomation.csproj">

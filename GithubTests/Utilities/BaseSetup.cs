@@ -1,30 +1,31 @@
 ﻿using GithubAutomation.Pages;
 using GithubAutomation.Selenium;
+using GithubAutomation.Workflows;
 using NUnit.Framework;
 
 namespace GithubTests.Utilities
 {
     [TestFixture]
-    public class GithubTest
+    public class BaseSetup
     {
-        //change to your username and to your password
-        private const string Username = "?";
-        private const string Password = "?";
-
         [SetUp]
         public void Init()
         {
             Driver.Initialize();
+
+            RepoCreator.Initialize();
+
             LoginPage.GoTo();
             LoginPage
-                .LoginAs(Username)
-                .WithPassword(Password)
+                .LoginAs(Driver.Username)
+                .WithPassword(Driver.Password)
                 .Login();
         }
 
         [TearDown]
         public void CleanUp()
         {
+            RepoCreator.CleanUp();
             Driver.Close();
         }
     }

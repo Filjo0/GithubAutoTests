@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading;
 using GithubAutomation.Navigation;
 using GithubAutomation.Selenium;
 using OpenQA.Selenium;
@@ -45,15 +44,37 @@ namespace GithubAutomation.Pages
         {
             get
             {
-                var isListOfReposPage = Driver.Instance.FindElement(By.CssSelector("a.UnderlineNav-item.selected"));
-                return Regex.Replace(isListOfReposPage.Text, @"\d+", "").Contains("Repositories");
+                var isListOfReposPage = Driver.Instance.FindElements(By.CssSelector("a.UnderlineNav-item.selected"));
+                return isListOfReposPage.Count > 0 && Regex.Replace(isListOfReposPage[0].Text, @"\d+", "").Contains("Repositories");
             }
+        }
+
+        public static bool DoesRepoExistWithTitle(string title)
+        {
+            if (!IsAtListOfReposPage)
+            {
+                GoToListOfRepos();
+            }
+
+            return Driver.Instance.FindElements(By.LinkText(title)).Any();
         }
 
         public static bool HaveRepos()
         {
+            if (!IsAtListOfReposPage)
+            {
+                GoToListOfRepos();
+            }
+
             var reposList = Driver.Instance.FindElements(By.CssSelector("h3.wb-break-all a"));
             return reposList.Count > 0;
+        }
+
+        public static bool FoundRepos()
+        {
+            var reposList = Driver.Instance.FindElement(By.CssSelector("div.v-align-top strong"));
+            var numOfRepos = int.Parse(reposList.Text);
+            return numOfRepos > 0;
         }
 
         public static void GoToFirstRepoPage()
@@ -70,11 +91,15 @@ namespace GithubAutomation.Pages
 
         public static void GoToRepoPage(string title)
         {
+            if (IsAtListOfReposPage)
+            {
+                GoToListOfRepos();
+            }
             var repoPage = Driver.Instance.FindElement(By.LinkText(title));
             repoPage.Click();
         }
 
-        public static void DeleteRepo()
+        public static void DeleteRepo(string title)
         {
             RepoPanel.Settings.Select();
 
@@ -103,6 +128,18 @@ namespace GithubAutomation.Pages
             var confirmationButton =
                 FindDisplayed(Driver.Instance.FindElements(By.CssSelector("button.btn.btn-block.btn-danger")));
             confirmationButton.Click();
+        }
+
+        public static void SearchForRepo(string searchString)
+        {
+            if (!IsAtListOfReposPage)
+            {
+                GoToListOfRepos();
+            }
+
+            var searchBox = Driver.Instance.FindElement(By.Id("your-repos-filter"));
+            searchBox.SendKeys(searchString);
+            Driver.Wait(TimeSpan.FromSeconds(3));
         }
     }
 }

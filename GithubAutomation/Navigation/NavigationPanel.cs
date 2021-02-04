@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using GithubAutomation.Selenium;
 using OpenQA.Selenium;
 
@@ -37,6 +38,7 @@ namespace GithubAutomation.Navigation
                 public static void Select()
                 {
                     var goToReposPage = Driver.Instance.FindElement(By.LinkText("Your repositories"));
+                    Driver.Wait(TimeSpan.FromSeconds(1));
                     goToReposPage.Click();
                 }
             }

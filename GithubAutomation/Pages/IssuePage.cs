@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using GithubAutomation.Navigation;
 using GithubAutomation.Selenium;
 using OpenQA.Selenium;
@@ -8,8 +9,6 @@ namespace GithubAutomation.Pages
 {
     public static class IssuePage
     {
-        private static int _lastCount;
-
         public static string Title
         {
             get
@@ -19,7 +18,7 @@ namespace GithubAutomation.Pages
             }
         }
 
-        public static int PreviousIssueCount => _lastCount;
+        public static int PreviousIssueCount { get; private set; }
 
         public static int CurrentIssueCount => GetIssueCount();
 
@@ -45,7 +44,7 @@ namespace GithubAutomation.Pages
 
         public static void CountIssues()
         {
-            _lastCount = GetIssueCount();
+            PreviousIssueCount = GetIssueCount();
         }
 
         private static int GetIssueCount()
@@ -58,7 +57,6 @@ namespace GithubAutomation.Pages
                 number = Convert.ToInt32(countIssues.Text);
             }
 
-            Console.WriteLine(number);
             return number;
         }
 
@@ -73,6 +71,7 @@ namespace GithubAutomation.Pages
             if (issuesWithTitle.Count > 0)
             {
                 issuesWithTitle[0].Click();
+                Driver.Wait(TimeSpan.FromSeconds(3));
             }
 
             var buttons = Driver.Instance.FindElements(By.CssSelector("summary span strong"));
@@ -90,6 +89,23 @@ namespace GithubAutomation.Pages
             {
                 submitDeleteButton.Click();
             }
+        }
+
+        public static bool FoundOpenIssues()
+        {
+            var openIssues = Driver.Instance
+                .FindElement(By.CssSelector("div.flex-auto.d-none.d-lg-block.no-wrap > div > a.btn-link.selected"))
+                .Text;
+            var openIssuesNum = int.Parse(Regex.Replace(openIssues, "[^0-9]+", ""));
+            return openIssuesNum > 0;
+        }
+
+        public static void SearchForIssue(string title)
+        {
+            var searchBox = Driver.Instance.FindElement(By.Id("js-issues-search"));
+            searchBox.SendKeys(title);
+            searchBox.SendKeys(Keys.Enter);
+            Driver.Wait(TimeSpan.FromSeconds(1));
         }
     }
 

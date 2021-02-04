@@ -7,7 +7,10 @@ namespace GithubAutomation.Selenium
 {
     public static class Driver
     {
-        public static IWebDriver Instance { get; set; }
+        //change to your username and to your password
+        public const string Username = "?";
+        public const string Password = "?";
+        public static IWebDriver Instance { get; private set; }
 
         public static string BaseAddress => "https://github.com/";
 
