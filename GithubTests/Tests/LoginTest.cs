@@ -2,11 +2,14 @@
 using GithubTests.Utilities;
 using NUnit.Framework;
 
-namespace GithubTests.Smoke_Tests
+namespace GithubTests.Tests
 {
     [TestFixture]
     public class Tests : BaseSetup
     {
+        /// <summary>
+        /// Checks that user can login.
+        /// </summary>
         [Test]
         public void User_Can_Login()
         {

@@ -45,7 +45,8 @@ namespace GithubAutomation.Pages
             get
             {
                 var isListOfReposPage = Driver.Instance.FindElements(By.CssSelector("a.UnderlineNav-item.selected"));
-                return isListOfReposPage.Count > 0 && Regex.Replace(isListOfReposPage[0].Text, @"\d+", "").Contains("Repositories");
+                return isListOfReposPage.Count > 0 &&
+                       Regex.Replace(isListOfReposPage[0].Text, @"\d+", "").Contains("Repositories");
             }
         }
 
@@ -95,6 +96,7 @@ namespace GithubAutomation.Pages
             {
                 GoToListOfRepos();
             }
+
             var repoPage = Driver.Instance.FindElement(By.LinkText(title));
             repoPage.Click();
         }

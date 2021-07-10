@@ -3,19 +3,25 @@ using GithubAutomation.Workflows;
 using GithubTests.Utilities;
 using NUnit.Framework;
 
-namespace GithubTests.Smoke_Tests
+namespace GithubTests.Tests
 {
     [TestFixture]
     public class NewIssuesTest : BaseSetup
     {
+        /// <summary>
+        /// Checks that the issues page can be opened.
+        /// </summary>
         [Test]
         public void Can_Go_To_List_Of_Issues_Page()
         {
             RepoPage.GoToRepoPage("TestRepo");
             IssuePage.GoToListOfIssues();
-            Assert.That(IssuePage.IsAt, "Failed to open Issues Page");
+            Assert.That(IssuePage.IsAt, "Failed to open the Issues page");
         }
 
+        /// <summary>
+        /// Checks that new issue can be added.
+        /// </summary>
         [Test]
         public void Can_Create_Issue()
         {
@@ -26,9 +32,12 @@ namespace GithubTests.Smoke_Tests
 
             IssuePage.GoToListOfIssues();
 
-            Assert.IsTrue(IssuePage.DoesIssueExistWithTitle(IssueCreator.IssueTitle), "Issue does not exist");
+            Assert.IsTrue(IssuePage.DoesIssueExistWithTitle(IssueCreator.IssueTitle), "Failed to locate added issue..");
         }
 
+        /// <summary>
+        /// Checks that added issue is visible in the list.
+        /// </summary>
         [Test]
         public void Added_Issue_Shows_Up()
         {
@@ -40,37 +49,35 @@ namespace GithubTests.Smoke_Tests
 
             IssuePage.GoToListOfIssues();
             Assert.AreEqual(IssuePage.PreviousIssueCount + 1, IssuePage.CurrentIssueCount,
-                "Count of issues did not increase");
+                "Failed to add new issue to the list.");
 
-            Assert.IsTrue(IssuePage.DoesIssueExistWithTitle("Test Issue"), "Issue does not exist");
+            Assert.IsTrue(IssuePage.DoesIssueExistWithTitle("Test Issue"), "Failed to locate added issue.");
 
             IssuePage.DeleteIssue(IssueCreator.IssueTitle);
-            Assert.AreEqual(IssuePage.PreviousIssueCount, IssuePage.CurrentIssueCount, "Could not delete issue");
+            Assert.AreEqual(IssuePage.PreviousIssueCount, IssuePage.CurrentIssueCount, "Failed to delete added issue.");
         }
 
+        /// <summary>
+        /// Checks that particular issue can be found when using search.
+        /// </summary>
         [Test]
         public void Can_Search_Issues()
         {
             RepoPage.GoToRepoPage("TestRepo");
             IssuePage.GoToListOfIssues();
 
-            //Search for Issue
             IssuePage.SearchForIssue("Test Issue");
 
-            // Check if Repo already exists
             if (!IssuePage.FoundOpenIssues())
             {
-                //create a new issue if does not exist
                 IssueCreator.CreateIssue();
                 IssuePage.GoToListOfIssues();
             }
 
-            //Check that Issue shows up in results
-            Assert.IsTrue(IssuePage.DoesIssueExistWithTitle("Test Issue"), "Issue does not exist");
+            Assert.IsTrue(IssuePage.DoesIssueExistWithTitle("Test Issue"), "Failed to locate the issue.");
 
-            //Cleanup
             IssuePage.DeleteIssue("Test Issue");
-            Assert.IsFalse(IssuePage.DoesIssueExistWithTitle("Test Issue"), "Issue was not deleted");
+            Assert.IsFalse(IssuePage.DoesIssueExistWithTitle("Test Issue"), "Failed to delete the issue.");
         }
     }
 }
